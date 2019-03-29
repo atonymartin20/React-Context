@@ -9,45 +9,55 @@ class MyProvider extends Component {
     name: 'Wes',
     age: 100,
     cool: true
-  }
+  };
   render() {
     return (
-      <MyContext.Provider value={{
-        state: this.state,
-        growAYearOlder: () => this.setState({
-          age: this.state.age + 1
-        })
-      }}>
+      <MyContext.Provider
+        value={{
+          state: this.state,
+          growAYearOlder: () =>
+            this.setState({
+              age: this.state.age + 1
+            }),
+          addData: value =>
+            this.setState({
+              data: value
+            })
+        }}
+      >
         {this.props.children}
       </MyContext.Provider>
-    )
+    );
   }
 }
 
-const Family = (props) => (
+const Family = props => (
   <div className="family">
     <Person />
   </div>
-)
+);
 
 class Person extends Component {
   render() {
     return (
       <div className="person">
         <MyContext.Consumer>
-          {(context) => (
+          {context => (
             <React.Fragment>
               <p>Age: {context.state.age}</p>
               <p>Name: {context.state.name}</p>
+              <p>Data: {context.state.data}</p>
               <button onClick={context.growAYearOlder}>🍰🍥🎂</button>
+              <button onClick={context.addData.bind(MyProvider, 'abcdefg')}>
+                Add Data
+              </button>
             </React.Fragment>
           )}
         </MyContext.Consumer>
       </div>
-    )
+    );
   }
 }
-
 
 class App extends Component {
   render() {
@@ -61,6 +71,5 @@ class App extends Component {
     );
   }
 }
-
 
 export default App;
